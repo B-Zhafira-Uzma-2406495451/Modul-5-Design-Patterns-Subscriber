@@ -67,7 +67,7 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [ ] Commit: `Implement add function in Notification repository.`
     -   [ ] Commit: `Implement list_all_as_string function in Notification repository.`
     -   [ ] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
--   **STAGE 3: Implement services and controllers**
+-   **STAGE 2: Implement services and controllers**
     -   [ ] Commit: `Create Notification service struct skeleton.`
     -   [ ] Commit: `Implement subscribe function in Notification service.`
     -   [ ] Commit: `Implement subscribe function in Notification controller.`
