@@ -59,14 +59,14 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   Open another new terminal, edit `ROCKET_PORT` in `.env` to `8003`, then execute `cargo run`.
 
 ## Mandatory Checklists (Subscriber)
--   [ ] Clone https://gitlab.com/ichlaffterlalu/bambangshop-receiver to a new repository.
+-   [✅] Clone https://gitlab.com/ichlaffterlalu/bambangshop-receiver to a new repository.
 -   **STAGE 1: Implement models and repositories**
-    -   [ ] Commit: `Create Notification model struct.`
-    -   [ ] Commit: `Create SubscriberRequest model struct.`
-    -   [ ] Commit: `Create Notification database and Notification repository struct skeleton.`
-    -   [ ] Commit: `Implement add function in Notification repository.`
-    -   [ ] Commit: `Implement list_all_as_string function in Notification repository.`
-    -   [ ] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
+    -   [✅] Commit: `Create Notification model struct.`
+    -   [✅] Commit: `Create SubscriberRequest model struct.`
+    -   [✅] Commit: `Create Notification database and Notification repository struct skeleton.`
+    -   [✅] Commit: `Implement add function in Notification repository.`
+    -   [✅] Commit: `Implement list_all_as_string function in Notification repository.`
+    -   [✅] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
 -   **STAGE 2: Implement services and controllers**
     -   [ ] Commit: `Create Notification service struct skeleton.`
     -   [ ] Commit: `Implement subscribe function in Notification service.`
@@ -85,5 +85,26 @@ This is the place for you to write reflections:
 ### Mandatory (Subscriber) Reflections
 
 #### Reflection Subscriber-1
+1. Dalam tutorial ini, variabel NOTIFICATIONS yang menyimpan Vec<Notification> bersifat global dan diakses oleh
+banyak thread secara bersamaan, sehingga kita wajib menggunakan mekanisme sinkronisasi untuk mencegah data race
+atau tabrakan memori yang bisa membuat program crash. Kita memilih menggunakan RwLock<>, bukan Mutex<> karena
+RwLock menawarkan fleksibilitas yang jauh lebih tinggi dan efisien untuk skenario kita. Berbeda dengan Mutex yang
+sangat kaku dan hanya mengizinkan satu thread untuk mengakses data pada satu waktu, baik untuk membaca maupun
+menulis, RwLock mengizinkan banyak thread untuk membaca daftar notifikasi secara bersamaan asalkan tidak ada thread
+yang sedang menulis. Karena dalam sebuah sistem notifikasi operasi untuk melihat atau membaca pesan biasanya jauh
+lebih sering dilakukan dibandingkan operasi menambahkan pesan baru, penggunaan RwLock memastikan aplikasi
+BambangShop memiliki performa yang optimal dan terhindar dari antrean proses yang tidak perlu saat banyak pengguna
+hanya ingin membaca data.
+
+2. Berbeda dengan Java yang membebaskan mutasi variabel static global dan mengandalkan developer untuk mengatur
+keamanan thread secara manual, Rust mendesain bahasanya dengan prinsip memory safety dan pencegahan data race yang
+sangat ketat sejak proses kompilasi. Rust menganggap shared mutable state sebagai tindakan yang sangat rentan
+terhadap tabrakan data dalam lingkungan multi-threading, sehingga compiler secara bawaan melarang kita
+memodifikasinya secara langsung. Selain itu, Rust mewajibkan variabel static biasa untuk diinisialisasi pada saat
+compile-time dengan nilai yang sudah pasti, padahal struktur data dinamis seperti Vec atau DashMap memerlukan
+alokasi memori dinamis yang hanya bisa dilakukan saat program sedang berjalan. Untuk mengatasi kedua batasan
+inilah kita menggunakan library lazy_static yang menunda proses inisialisasi struktur data tersebut hingga pertama
+kali dipanggil, dan membungkusnya dengan perlindungan konkurensi seperti RwLock pada Vec agar isinya tetap bisa
+dimodifikasi dengan aman tanpa melanggar aturan ketat ownership Rust.
 
 #### Reflection Subscriber-2
