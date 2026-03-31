@@ -68,16 +68,16 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [✅] Commit: `Implement list_all_as_string function in Notification repository.`
     -   [✅] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
 -   **STAGE 2: Implement services and controllers**
-    -   [ ] Commit: `Create Notification service struct skeleton.`
-    -   [ ] Commit: `Implement subscribe function in Notification service.`
-    -   [ ] Commit: `Implement subscribe function in Notification controller.`
-    -   [ ] Commit: `Implement unsubscribe function in Notification service.`
-    -   [ ] Commit: `Implement unsubscribe function in Notification controller.`
-    -   [ ] Commit: `Implement receive_notification function in Notification service.`
-    -   [ ] Commit: `Implement receive function in Notification controller.`
-    -   [ ] Commit: `Implement list_messages function in Notification service.`
-    -   [ ] Commit: `Implement list function in Notification controller.`
-    -   [ ] Write answers of your learning module's "Reflection Subscriber-2" questions in this README.
+    -   [✅] Commit: `Create Notification service struct skeleton.`
+    -   [✅] Commit: `Implement subscribe function in Notification service.`
+    -   [✅] Commit: `Implement subscribe function in Notification controller.`
+    -   [✅] Commit: `Implement unsubscribe function in Notification service.`
+    -   [✅] Commit: `Implement unsubscribe function in Notification controller.`
+    -   [✅] Commit: `Implement receive_notification function in Notification service.`
+    -   [✅] Commit: `Implement receive function in Notification controller.`
+    -   [✅] Commit: `Implement list_messages function in Notification service.`
+    -   [✅] Commit: `Implement list function in Notification controller.`
+    -   [✅] Write answers of your learning module's "Reflection Subscriber-2" questions in this README.
 
 ## Your Reflections
 This is the place for you to write reflections:
@@ -108,3 +108,27 @@ kali dipanggil, dan membungkusnya dengan perlindungan konkurensi seperti RwLock 
 dimodifikasi dengan aman tanpa melanggar aturan ketat ownership Rust.
 
 #### Reflection Subscriber-2
+1. Saya sudah mempelajari beberapa bagian kode di luar tutorial utama, salah satunya adalah file src/lib.rs. Dari file tersebut, saya
+mempelajari bagaimana infrastruktur dasar aplikasi dibangun, seperti penggunaan REQWEST_CLIENT yang berfungsi sebagai klien HTTP
+global untuk mengirimkan permintaan asinkron antar aplikasi. Selain itu, saya juga memahami peran APP_CONFIG dalam mengelola
+konfigurasi variabel lingkungan secara terpusat, termasuk URL root dan nama instansi, yang sangat membantu dalam memastikan
+konsistensi saat menjalankan beberapa instansi Receiver secara bersamaan. Terakhir, saya menemukan bahwa src/lib.rs menyediakan
+abstraksi penting untuk penanganan error melalui tipe Result kustom dan fungsi compose_error_response, yang memastikan semua respon
+kesalahan dalam sistem memiliki format yang seragam dan profesional.
+
+2. Penerapan Observer Pattern memudahkan saya untuk menambahan subscriber karena main app hanya perlu menyimpan daftar subscriber
+dalam sebuah koleksi dan melakukan iterasi melalui fungsi notify() untuk mengirimkan permintaan HTTP ke setiap URL subscriber yang
+relevan secara otomatis. Hal ini memungkinkan kita untuk menambah atau menghapus subscriber secara dinamis melalui endpoint yang
+tersedia tanpa harus mengubah logika inti pada aplikasi Publisher. Namun, menjalankan lebih dari satu instansi main app tidak akan
+semudah itu karena saat ini daftar subscriber disimpan dalam variabel statis SUBSCRIBERS menggunakan DashMap yang bersifat in-memory.
+Akibatnya, setiap instansi Main app akan memiliki daftar subscriber yang berbeda dan terisolasi di memorinya masing-masing, sehingga
+seorang pengguna hanya akan menerima notifikasi dari instansi tempat ia mendaftar kecuali jika sistem dikembangkan lebih lanjut
+menggunakan basis data atau message broker terpusat untuk sinkronisasi data antar instansi Publisher.
+
+3. Saya telah mencoba mengimplementasikan fitur Tests pada koleksi Postman untuk mengotomatisasi validasi setiap endpoint yang
+dikembangkan dalam tutorial ini. Contohnya, ketika saya membuat test untuk memastikan bahwa endpoint /notification/subscribe selalu
+memberikan respon status 201 Created dan mengembalikan data JSON yang berisi URL serta nama subscriber yang tepat. Selain itu, saya
+juga menambahkan test pada endpoint pembuatan produk untuk memverifikasi kesesuaian atribut produk seperti judul, harga, dan tipe
+produk dalam respon yang diterima. Fitur ini sangat berguna bagi program saya karena sistem dapat secara otomatis mendeteksi jika
+terjadi kesalahan pada alur kerja pola Observer atau pengelolaan data produk tanpa perlu melakukan pengecekan manual secara
+repetitif.
